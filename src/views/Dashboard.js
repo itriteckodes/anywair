@@ -12,7 +12,7 @@ const Dashboard = () => {
             </CardTitle>
             <CardBody className="">
               <CardText>
-                Hello World!!!
+                Hello World
               </CardText>
             </CardBody>
           </Card>
