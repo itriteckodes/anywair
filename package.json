@@ -1,6 +1,7 @@
 {
   "name": "starter-bt5",
   "version": "0.1.0",
+  "homepage": "http://itriteckodes.github.io/anywair",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.15.0",
@@ -21,6 +22,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
