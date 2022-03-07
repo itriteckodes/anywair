@@ -1,2 +1,0 @@
-(this["webpackJsonpstarter-bt5"]=this["webpackJsonpstarter-bt5"]||[]).push([[6],{34:function(e,t,s){"use strict";s.r(t);var c=s(12),r=s(4);t.default=function(){return Object(r.jsx)("div",{children:Object(r.jsx)(c.D,{children:Object(r.jsx)(c.n,{children:Object(r.jsxs)(c.g,{children:[Object(r.jsx)(c.m,{tag:"h3",className:"border-bottom p-3 mb-0",children:"Dashboard"}),Object(r.jsx)(c.h,{className:"",children:Object(r.jsx)(c.l,{children:"Hello World!!!"})})]})})})})}}}]);
-//# sourceMappingURL=6.3d3e2cdd.chunk.js.map
