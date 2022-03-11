@@ -3,31 +3,35 @@ import {
   Row,
   Col,
   CardBody,
-//   Button,
+  Button,
   Form,
   FormGroup,
   Label,
   Input,
   CardTitle,
- 
 } from "reactstrap";
 import { Link } from "react-router-dom";
-
+import { useEffect, useState } from "react";
 
 const Login = () => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = `You've clicked ${count} times.`;
+  });
   return (
     <Row className="mt-5">
       <Col lg="4"></Col>
       <Col lg="4">
         <Card>
           <CardTitle tag="h5" className="text-center mt-3">
-         
-            Login To Admin Dashboard
+            Login {count} To Admin Dashboard
           </CardTitle>
           <CardBody className="p-8">
             <Row justify-content>
               <Col lg="12">
-                <Form >
+                
+                <Form>
                   <FormGroup>
                     <Label for="exampleEmail">Email</Label>
                     <Input
@@ -46,8 +50,10 @@ const Login = () => {
                       type="password"
                     />
                   </FormGroup>
-
-                  <Link to={'/'}  className="btn btn-primary">Submit</Link>
+                  <Button onClick={() => setCount(count + 1)}>click</Button>
+                  <Link to={"/"} className="btn btn-primary">
+                    Submit
+                  </Link>
                 </Form>
               </Col>
             </Row>
