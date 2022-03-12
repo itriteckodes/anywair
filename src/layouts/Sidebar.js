@@ -2,6 +2,8 @@ import { Button, Nav, NavItem } from "reactstrap";
 import { Link, useLocation } from "react-router-dom";
 import user1 from "../assets/images/users/user4.jpg";
 import probg from "../assets/images/bg/download.jpg";
+import { object } from "prop-types";
+
 
 const navigation = [
   {
@@ -9,11 +11,11 @@ const navigation = [
     href: "/starter",
     icon: "bi bi-speedometer2",
   },
-  // {
-  //   title: "Alert",
-  //   href: "/alerts",
-  //   icon: "bi bi-bell",
-  // },
+  {
+    title: "Loan",
+    href: "/loans",
+    icon: "bi bi-bell",
+  },
   // {
   //   title: "Badges",
   //   href: "/badges",
@@ -60,7 +62,13 @@ const Sidebar = () => {
   const showMobilemenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
+  var user = {}
+  
   let location = useLocation();
+  if (localStorage.getItem('token') != '') {
+   user = JSON.parse(localStorage.getItem('token'))
+  }
+
 
   return (
     <div>
@@ -79,7 +87,7 @@ const Sidebar = () => {
             <i className="bi bi-x"></i>
           </Button>
         </div>
-        <div className="bg-dark text-white p-2 opacity-75">Steave Rojer</div>
+        <div className="bg-dark text-white p-2 opacity-75">{user.name}</div>
       </div>
       <div className="p-3 mt-2">
         <Nav vertical className="sidebarNav">

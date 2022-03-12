@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+
 import {
   Navbar,
   Collapse,
@@ -17,8 +19,17 @@ import {
 import Logo from "./Logo";
 import { ReactComponent as LogoWhite } from "../assets/images/logos/materialprowhite.svg";
 import user1 from "../assets/images/users/user4.jpg";
+import { useNavigate } from 'react-router-dom';
+
 
 const Header = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem('token') == '') {
+      navigate('/login',true)
+    }
+  });
+ 
   const [isOpen, setIsOpen] = React.useState(false);
 
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
@@ -30,6 +41,12 @@ const Header = () => {
   const showMobilemenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
+  const logout = (e) => {
+    e.preventDefault()
+    localStorage.setItem('token','')
+    navigate('/login', true);
+    
+  }
   return (
     <Navbar color="primary" dark expand="md" className="fix-header">
       <div className="d-flex align-items-center">
@@ -102,9 +119,11 @@ const Header = () => {
             <DropdownItem divider />
             {/* <DropdownItem>My Balance</DropdownItem>
             <DropdownItem>Inbox</DropdownItem> */}
+            
             <DropdownItem>
               <Link
-                to="/login"
+                to={''}
+                onClick={logout}
                 style={{ textDecoration: "none", color: "black" }}
               >
                 Logout
