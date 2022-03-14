@@ -10,6 +10,7 @@ import { CardSubtitle, Table } from "reactstrap";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { API_BASE_URL } from "../components/values/strings";
+import { Api } from "../helper/Helper";
 
 const Loan = () => {
   const [PendingLoans, setLoans] = useState([]);
@@ -19,34 +20,16 @@ const Loan = () => {
    const sendRequest = useCallback(async (type,loanId) => {
      console.log(loanId);
      if(type ==  'approve')
-    var API_URL = API_BASE_URL + '/credit/approve/loan/request/' + loanId.toString();
+    var API_URL =  '/credit/approve/loan/request/' + loanId.toString();
     else
-    var API_URL = API_BASE_URL + '/credit/view/loan/' + loanId.toString();
+    var API_URL =  '/credit/view/loan/' + loanId.toString();
 
     if (isSending) return
     setIsSending(true)
     // send the actual request
-    axios.get(API_URL,{
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': '*/*',
-        'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbnl3YWlyX3N0YWZmIiwicm9sZSI6IkNSRURJVF9PRkZJQ0VSIiwibmFtZSI6IkNSRURJVCBPRkZJQ0VSIiwiaXNzIjoiQW55d2FpciBHcm91cCIsImlkIjoiMTI0NjMwZWItMWFmYi00ZTg3LTkyM2MtZDk1OTVjZGE1YzZlIiwiZXhwIjoxNjQ3MjcyMTY5LCJpYXQiOjE2NDcxODU3NjksImVtYWlsIjoiY3JlZGl0QGFueXdhaXIuY29tIn0.NQPwpukdW86mEhofa9ikImnr_d9XRVtrMDBTAHkleQs'
-      }
-    }).then(
-      response => {
-        if (response.data.title === 'success') {
-          console.log(response);
-          handleResponse(response.data.data);
-        } else {
-          console.log(response.data);
-          Swal.fire({
-            title: 'Error!',
-            text: response.data.message,
-            icon: 'error',
-          });
-        }
-      },
-    )
+    var response = await Api(API_URL,'Get',{})
+    if(response)
+    handleResponse(response)
     // once the request is sent, update state again
     if (isMounted.current) // only update if we are still mounted
       setIsSending(false)
@@ -61,27 +44,13 @@ const Loan = () => {
   }, []);
   const fetchData = async () => {
 
-    axios.post(API_BASE_URL + '/credit/pending/loans', {}, {
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': '*/*',
-        'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbnl3YWlyX3N0YWZmIiwicm9sZSI6IkNSRURJVF9PRkZJQ0VSIiwibmFtZSI6IkNSRURJVCBPRkZJQ0VSIiwiaXNzIjoiQW55d2FpciBHcm91cCIsImlkIjoiMTI0NjMwZWItMWFmYi00ZTg3LTkyM2MtZDk1OTVjZGE1YzZlIiwiZXhwIjoxNjQ3MjcyMTY5LCJpYXQiOjE2NDcxODU3NjksImVtYWlsIjoiY3JlZGl0QGFueXdhaXIuY29tIn0.NQPwpukdW86mEhofa9ikImnr_d9XRVtrMDBTAHkleQs'
-      }
-    }).then(
-      response => {
-        if (response.data.title === 'success') {
-          handleResponse(response.data.data);
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: response.data.message,
-            icon: 'error',
-          });
-        }
-      },
-    )
+   
+      var response = await Api('/credit/pending/loans','post',{})
+  
+      handleResponse(response)
   }
   const handleResponse = (loans) => {
+ 
     const mrows = [];
     for (var i = 0; i < loans.length; i++) {
       mrows.push(createData(loans[i].loanId, loans[i].dailyRate, loans[i].weeklyRate, loans[i].monthlyRate, loans[i].payablePeriod, loans[i].loanDeposit, loans[i].unPaidDeposit, loans[i].loanStatus));
