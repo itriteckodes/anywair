@@ -1,123 +1,107 @@
 import {
   Card,
-  Row,
-  Col,
+  Button,
   CardBody,
-  Form,
-  FormGroup,
-  Label,
-  Input,
   CardTitle,
 } from "reactstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { CardSubtitle, Table } from "reactstrap";
+
 import axios from "axios";
 import Swal from "sweetalert2";
 import { API_BASE_URL } from "../components/values/strings";
-import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+const Loan = (props) => {
+  const [PendingLoans, setLoans] = useState([]);
+  useEffect(() => {
+    var user = {}
 
-  
- const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const data = {
-      "email": formData.email,
-      "password": formData.password,
-  };
-
- axios.post(API_BASE_URL + '/admin/auth/login', data, {
-    headers: {
-        'Content-Type': 'application/json',
-        'accept':'*/*'
+    if (localStorage.getItem('token') != '') {
+      user = JSON.parse(localStorage.getItem('token'))
     }
-}).then(
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+
+    axios.post(API_BASE_URL + '/credit/pending/loans', {}, {
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': '*/*',
+        'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbnl3YWlyX3N0YWZmIiwicm9sZSI6IkNSRURJVF9PRkZJQ0VSIiwibmFtZSI6IkNSRURJVCBPRkZJQ0VSIiwiaXNzIjoiQW55d2FpciBHcm91cCIsImlkIjoiMTI0NjMwZWItMWFmYi00ZTg3LTkyM2MtZDk1OTVjZGE1YzZlIiwiZXhwIjoxNjQ3MjcyMTY5LCJpYXQiOjE2NDcxODU3NjksImVtYWlsIjoiY3JlZGl0QGFueXdhaXIuY29tIn0.NQPwpukdW86mEhofa9ikImnr_d9XRVtrMDBTAHkleQs'
+      }
+    }).then(
       response => {
         if (response.data.title === 'success') {
-        Swal.fire({
-          title: 'Success!',
-          text: response.data.message,
-          icon: 'success',
-          confirmButtonText: 'ok'
-      });
-      
-      localStorage.setItem('token',JSON.stringify(response.data.data));
+          handleResponse(response.data.data);
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: response.data.message,
+            icon: 'error',
+          });
+        }
+      },
+    )
+  }
+  const handleResponse = (loans) => {
+    const mrows = [];
+    for (var i = 0; i < loans.length; i++) {
+      mrows.push(createData(loans[i].loanId, loans[i].dailyRate, loans[i].weeklyRate, loans[i].monthlyRate, loans[i].payablePeriod, loans[i].loanDeposit, loans[i].unPaidDeposit, loans[i].loanStatus));
+    }
+    setLoans(mrows);
 
-      navigate('/starter', true);
+  }
+  function createData(loanId, dailyRate, weeklyRate, monthlyRate, payPeriod, loanDeposit, unPaidDeposit, loanStatus) {
+    return { loanId, dailyRate, weeklyRate, monthlyRate, payPeriod, loanDeposit, unPaidDeposit, loanStatus };
+  }
 
-    }else{
-        Swal.fire({
-          title: 'Error!',
-          text:  response.data.message,
-          icon: 'error',
-      });
-      }
-        
-        },
-      )
-  .catch(error => {
-      Swal.fire({
-        title: 'Error!',
-        text:  'Error',
-        icon: 'error',
-    });
-    
-  });
-
-}
 
   return (
-    <Row className="mt-5">
-      <Col lg="4"></Col>
-      <Col lg="4">
-        <Card>
-          <CardTitle tag="h5" className="text-center mt-3">
-            Login To Admin Dashboard
-          </CardTitle>
-          <CardBody className="p-8">
-            <Row justify-content>
-              <Col lg="12">
-                <Form onSubmit={handleSubmit}>
-                  <FormGroup>
-                    <Label for="exampleEmail">Email</Label>
-                    <Input
-                      id="exampleEmail"
-                      name="email"
-                      placeholder="Please Enter Email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+    <div>
+      <Card>
+        <CardBody>
+          <CardTitle tag="h5">Loans Requests</CardTitle>
+          <CardSubtitle className="mb-2 text-muted" tag="h6">
+            Loan Request applied by Customers
+          </CardSubtitle>
 
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="examplePassword">Password</Label>
-                    <Input
-                      id="examplePassword"
-                      name="password"
-                      placeholder="Enter Password"
-                      type="password"
-                      value={formData.password}
-                      onChange={(e) => setFormData({...formData, password: e.target.value})}
-                      
-                    />
-                  </FormGroup>
-                  
-                  <Input type="submit" value="Submit" name="Submit" placeholder="" />
-                </Form>
-              </Col>
-            </Row>
-          </CardBody>
-        </Card>
-      </Col>
-      <Col lg="4"></Col>
-    </Row>
+          <Table className="no-wrap mt-3 align-middle" responsive borderless>
+            <thead>
+              <tr>
+                <th>Sr no</th>
+                <th>Daily Rate</th>
+
+                <th>Weekly Rate</th>
+                <th>Monthly Rate</th>
+                <th>Payable Period</th>
+                <th>Loan Deposit</th>
+                <th>Unpaid Deposit</th>
+                <th>Loan Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PendingLoans.map((tdata, index) => (
+                <tr key={index} className="border-top">
+                  <td>{index + 1}</td>
+                  <td>{tdata.dailyRate}</td>
+                  <td>{tdata.weeklyRate}</td>
+                  <td>{tdata.monthlyRate}</td>
+                  <td>{tdata.payPeriod}</td>
+                  <td>{tdata.loanDeposit}</td>
+                  <td>{tdata.unPaidDeposit}</td>
+                  <td>{tdata.loanStatus}</td>
+                  <td>
+                  <Button onc color='success'>Approve Loan</Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </CardBody>
+      </Card>
+    </div>
   );
 };
 
-export default Login;
+export default Loan;

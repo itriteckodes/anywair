@@ -31,7 +31,7 @@ const FeedData = [
   {
     title: "New order received.",
     icon: "bi bi-bag-check",
-    color: "success",
+    color: "cc",
     date: "6 minute ago",
   },
   {
