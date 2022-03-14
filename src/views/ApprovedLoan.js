@@ -9,6 +9,7 @@ import {
   import axios from "axios";
   import Swal from "sweetalert2";
   import { API_BASE_URL } from "../components/values/strings";
+import { Api } from "../helper/Helper";
   
   const ApprovedLoan = (props) => {
     const [ApprovedLoans, setLoans] = useState([]);
@@ -18,30 +19,14 @@ import {
       if (localStorage.getItem('token') != '') {
         user = JSON.parse(localStorage.getItem('token'))
       }
-      fetchData();
+     
+      fetchData()
     }, []);
-    const fetchData = async () => {
-  
-      axios.post(API_BASE_URL + '/credit/approved/loans', {}, {
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': '*/*',
-          'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbnl3YWlyX3N0YWZmIiwicm9sZSI6IkNSRURJVF9PRkZJQ0VSIiwibmFtZSI6IkNSRURJVCBPRkZJQ0VSIiwiaXNzIjoiQW55d2FpciBHcm91cCIsImlkIjoiMTI0NjMwZWItMWFmYi00ZTg3LTkyM2MtZDk1OTVjZGE1YzZlIiwiZXhwIjoxNjQ3MjcyMTY5LCJpYXQiOjE2NDcxODU3NjksImVtYWlsIjoiY3JlZGl0QGFueXdhaXIuY29tIn0.NQPwpukdW86mEhofa9ikImnr_d9XRVtrMDBTAHkleQs'
-        }
-      }).then(
-        response => {
-          if (response.data.title === 'success') {
-            handleResponse(response.data.data);
-          } else {
-            Swal.fire({
-              title: 'Error!',
-              text: response.data.message,
-              icon: 'error',
-            });
-          }
-        },
-      )
-    }
+   const fetchData = async() => {
+    var response = await Api('/credit/approved/loans','post',{})
+
+    handleResponse(response)
+   }
     const handleResponse = (loans) => {
       const mrows = [];
       for (var i = 0; i < loans.length; i++) {
