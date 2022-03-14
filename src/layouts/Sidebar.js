@@ -16,6 +16,11 @@ const navigation = [
     href: "/loans",
     icon: "bi bi-bell",
   },
+  {
+    title: "Approved Loans",
+    href: "/approved/loans",
+    icon: "bi bi-bell",
+  },
   // {
   //   title: "Badges",
   //   href: "/badges",

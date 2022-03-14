@@ -8,6 +8,7 @@ const FullLayout = lazy(() => import("../layouts/FullLayout.js"));
 
 const Starter = lazy(() => import("../views/Dashboard.js"));
 const Loan = lazy(() => import("../views/Loan.js"));
+const ApprovedLoan = lazy(() => import("../views/ApprovedLoan.js"));
 const About = lazy(() => import("../views/About.js"));
 const Login = lazy(() =>import("../views/Login.js"));
 const Alerts = lazy(() => import("../views/ui/Alerts"));
@@ -29,6 +30,7 @@ const ThemeRoutes = [
       { path: "/", element: <Navigate to="/starter" /> },
       { path: "/starter", exact: true, element: <Starter /> },
       { path: "/loans", exact: true, element: <Loan /> },
+      { path: "/approved/loans", exact: true, element: <ApprovedLoan /> },
       { path: "/about", exact: true, element: <About /> },
       { path: "/alerts", exact: true, element: <Alerts /> },
       { path: "/badges", exact: true, element: <Badges /> },
