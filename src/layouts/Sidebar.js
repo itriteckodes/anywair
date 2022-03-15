@@ -26,6 +26,16 @@ const navigation = [
     href: "/about",
     icon: "bi bi-bell",
   },
+  {
+    title: "Pie Chart",
+    href: "/piechart",
+    icon: "bi bi-bell",
+  },
+  {
+    title: "Chart",
+    href: "/chart",
+    icon: "bi bi-bell",
+  },
   // {
   //   title: "Badges",
   //   href: "/badges",

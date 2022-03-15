@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 const About = () => {
   // var dt = require( 'datatables.net' )();
+  
   const data = [
     { id: 1, title: "DataTable in ReactJS", year: "2021" },
     { id: 1, title: "DataTable in y", year: "2021" },
